@@ -1,6 +1,23 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-char **parse_line(char *line);
+#include "token.h"
+
+typedef struct command
+{
+    char **argv;
+} command_t;
+
+/**
+ * @brief Parses a linked-list of tokens.
+ * @param line The command String.
+ * @return Pointer to a command struct.
+ */
+command_t *parse_command(token_t *tokens);
+/**
+ * @brief Frees the allocated memory for a command.
+ * @param cmd Pointer to the command struct.
+ */
+void free_command(command_t *cmd);
 
 #endif // !PARSER_H
