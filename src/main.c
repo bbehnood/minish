@@ -1,5 +1,8 @@
 #include "exec.h"
+#include "lexer.h"
 #include "parser.h"
+#include "token.h"
+#include "utils.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +11,7 @@ int main(void)
 {
     char *line = NULL;
     size_t len = 0;
+    token_t *tokens;
 
     while (1)
     {
@@ -20,8 +24,9 @@ int main(void)
             break;
         }
 
-        char **args = parse_line(line);
-        execute_command(args);
+        tokens = tokenize(line);
+        print_tokens(tokens);
+        free_tokens(tokens);
     }
 
     free(line);
