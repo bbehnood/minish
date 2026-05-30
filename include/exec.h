@@ -1,6 +1,8 @@
 #ifndef EXEC_H
 #define EXEC_H
 
-void execute_command(char **args);
+#include "parser.h"
+
+void execute_command(command_t *cmd);
 
 #endif // !EXEC_H
