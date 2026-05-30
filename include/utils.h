@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "parser.h"
 #include "token.h"
 
 /**
@@ -8,5 +9,11 @@
  * @param head The head of the linked-list.
  */
 void print_tokens(token_t *head);
+
+/**
+ * @brief Prints a command.
+ * @param cmd Pointer to command struct
+ */
+void print_command(command_t *cmd);
 
 #endif // !UTILS_H
