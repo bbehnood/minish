@@ -17,4 +17,6 @@ target_compile_options(minish PRIVATE
     -Wextra
     -Wpedantic
     -Werror
+    -O0
+    -g
 )
