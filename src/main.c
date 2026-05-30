@@ -12,6 +12,7 @@ int main(void)
     char *line = NULL;
     size_t len = 0;
     token_t *tokens;
+    command_t *cmd;
 
     while (1)
     {
@@ -26,7 +27,10 @@ int main(void)
 
         tokens = tokenize(line);
         print_tokens(tokens);
+        cmd = parse_command(tokens);
+        print_command(cmd);
         free_tokens(tokens);
+        free_command(cmd);
     }
 
     free(line);
