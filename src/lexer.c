@@ -10,14 +10,14 @@ static int is_operator(char c)
     return c == '|';
 }
 
-void lexer_init(lexer_t *lexer, char *input)
+static void lexer_init(lexer_t *lexer, const char *input)
 {
     lexer->input = input;
     lexer->pos = 0;
     lexer->current = input[0];
 }
 
-void lexer_advance(lexer_t *lexer)
+static void lexer_advance(lexer_t *lexer)
 {
     if (lexer->current != '\0')
     {
@@ -58,7 +58,7 @@ static char *collect_word(lexer_t *lexer)
     return word;
 }
 
-token_t *tokenize(char *input)
+token_t *tokenize(const char *input)
 {
     lexer_t lexer;
     token_t *tokens;

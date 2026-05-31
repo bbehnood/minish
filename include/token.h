@@ -26,7 +26,7 @@ typedef struct token
  * @param value The string(value) of the token.
  * @return Pointer to the new token.
  */
-token_t *new_token(token_type_t type, char *value);
+token_t *new_token(token_type_t type, const char *value);
 /**
  * @brief Appends a token to a linked-list of tokens.
  * @param head The head of the linked list.
