@@ -12,7 +12,7 @@ typedef struct lexer
 } lexer_t;
 
 /**
- * @brief Tokenize the input.
+ * @brief Tokenizes the input.
  * @param input The input string.
  */
 token_t *tokenize(char *input);
