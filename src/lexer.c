@@ -52,7 +52,7 @@ static char *collect_word(lexer_t *lexer)
     if (!word)
         return NULL;
 
-    strncpy(word, lexer->input + start, len);
+    memcpy(word, lexer->input + start, len);
     word[len] = '\0';
 
     return word;
