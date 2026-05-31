@@ -2,6 +2,8 @@
 #include "parser.h"
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void print_tokens(token_t *head)
 {

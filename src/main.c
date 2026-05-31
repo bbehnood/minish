@@ -1,38 +1,37 @@
 #include "exec.h"
 #include "lexer.h"
 #include "parser.h"
-#include "token.h"
+#include "shell.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
-    char *line = NULL;
+    shell_t shell;
     size_t len = 0;
-    token_t *tokens;
-    command_t *cmd;
+
+    shell_init(&shell, envp);
 
     while (1)
     {
         printf("minish> ");
         fflush(stdout);
 
-        if (getline(&line, &len, stdin) == -1)
+        if (getline(&shell.input_line, &len, stdin) == -1)
         {
             printf("\n");
             break;
         }
 
-        tokens = tokenize(line);
-        cmd = parse_command(tokens);
-        execute_command(cmd);
+        shell.tokens = tokenize(shell.input_line);
+        shell.cmd = parse_command(shell.tokens);
+        execute_command(shell.cmd);
 
-        free_tokens(tokens);
-        free_command(cmd);
+        shell_reset(&shell);
     }
 
-    free(line);
+    shell_cleanup(&shell);
 
     return EXIT_SUCCESS;
 }
