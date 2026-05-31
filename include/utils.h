@@ -16,4 +16,11 @@ void print_tokens(token_t *head);
  */
 void print_command(command_t *cmd);
 
+/**
+ * @brief Copies the environment variables.
+ * @param envp The list of environment variables provided by the OS.
+ * @return A copy of the environment variables.
+ */
+char **copy_env(char **envp);
+
 #endif // !UTILS_H
