@@ -2,7 +2,6 @@
 #include "lexer.h"
 #include "parser.h"
 #include "token.h"
-#include "utils.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,9 +25,9 @@ int main(void)
         }
 
         tokens = tokenize(line);
-        print_tokens(tokens);
         cmd = parse_command(tokens);
-        print_command(cmd);
+        execute_command(cmd);
+
         free_tokens(tokens);
         free_command(cmd);
     }
