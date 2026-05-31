@@ -36,7 +36,7 @@ command_t *parse_command(token_t *tokens)
     if (!cmd)
         return NULL;
 
-    cmd->argv = (char **)malloc(sizeof(char *) * argc + 1);
+    cmd->argv = (char **)malloc(sizeof(char *) * (argc + 1));
     if (!cmd->argv)
     {
         free(cmd);
@@ -50,8 +50,8 @@ command_t *parse_command(token_t *tokens)
         {
             while (i > 0)
             {
-                free(cmd->argv[i]);
                 i--;
+                free(cmd->argv[i]);
             }
 
             free(cmd->argv);
