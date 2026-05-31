@@ -6,7 +6,7 @@
 
 typedef struct lexer
 {
-    char *input;
+    const char *input;
     size_t pos;
     char current;
 } lexer_t;
@@ -15,6 +15,6 @@ typedef struct lexer
  * @brief Tokenizes the input.
  * @param input The input string.
  */
-token_t *tokenize(char *input);
+token_t *tokenize(const char *input);
 
 #endif // !LEXER_H
