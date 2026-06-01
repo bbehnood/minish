@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "parser.h"
 #include "token.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -15,13 +16,18 @@ static char **copy_env(char **envp)
 
     copy = malloc(sizeof(char *) * (count + 1));
     if (!copy)
+    {
+        fprintf(stderr, "minish: out of memory\n");
         return NULL;
-
+    }
     for (int i = 0; i < count; i++)
     {
         copy[i] = strdup(envp[i]);
         if (!copy[i])
+        {
+            fprintf(stderr, "minish: out of memory\n");
             return NULL;
+        }
     }
 
     copy[count] = NULL;
@@ -52,6 +58,13 @@ void shell_init(shell_t *shell, char **envp)
     shell->input_line = NULL;
     shell->tokens = NULL;
     shell->cmd = NULL;
+
+    if (!shell->env)
+    {
+        fprintf(stderr,
+                "minish: failed to copy the environment, aborting...\n");
+        shell->running = 0;
+    }
 }
 
 void shell_cleanup(shell_t *shell)

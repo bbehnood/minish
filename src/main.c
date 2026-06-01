@@ -13,7 +13,7 @@ int main(int argc, char **argv, char **envp)
 
     shell_init(&shell, envp);
 
-    while (1)
+    while (shell.running)
     {
         printf("minish> ");
         fflush(stdout);
