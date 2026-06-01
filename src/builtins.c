@@ -75,7 +75,7 @@ static void builtin_pwd(shell_t *shell, char **argv)
 
     if (argv[1])
     {
-        fprintf(stderr, "pwd: too many arguments");
+        fprintf(stderr, "pwd: too many arguments\n");
         shell->last_status = 1;
         return;
     }
