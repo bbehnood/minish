@@ -40,7 +40,7 @@ static int validate_syntax(token_t *tokens)
                 return -1;
             }
 
-            if (tokens->next && tokens->next->type == TOKEN_PIPE)
+            if (tokens->next->type == TOKEN_PIPE)
             {
                 syntax_error(tokens->value);
                 return -1;
@@ -66,56 +66,6 @@ static int count_words(token_t *tokens)
     return count;
 }
 
-static command_t *parse_command(parser_t *parser)
-{
-    command_t *cmd;
-    int argc;
-    int i;
-
-    argc = count_words(parser->current);
-
-    if (argc == 0)
-        return NULL;
-
-    cmd = (command_t *)malloc(sizeof(command_t));
-    if (!cmd)
-    {
-        fprintf(stderr, "minish: out of memory\n");
-        return NULL;
-    }
-
-    cmd->argv = (char **)malloc(sizeof(char *) * (argc + 1));
-    if (!cmd->argv)
-    {
-        fprintf(stderr, "minish: out of memory\n");
-        free(cmd);
-        return NULL;
-    }
-
-    i = 0;
-
-    while (parser->current && parser->current->type == TOKEN_WORD)
-    {
-        cmd->argv[i] = strdup(parser->current->value);
-        if (!cmd->argv[i])
-        {
-            while (i > 0)
-            {
-                i--;
-                free(cmd->argv[i]);
-                return NULL;
-            }
-        }
-
-        i++;
-        parser_advance(parser);
-    }
-
-    cmd->argv[i] = NULL;
-
-    return cmd;
-}
-
 static command_t *command_new(void)
 {
     command_t *cmd = (command_t *)malloc(sizeof(command_t));
@@ -131,16 +81,14 @@ static command_t *command_new(void)
     return cmd;
 }
 
-static command_t *command_last(command_t **head)
+static command_t *command_last(command_t *head)
 {
-    command_t *current = *head;
-
-    while (current->next)
+    while (head->next)
     {
-        current = current->next;
+        head = head->next;
     }
 
-    return current;
+    return head;
 }
 
 static void command_append(command_t **head, command_t *new)
@@ -156,28 +104,6 @@ static void command_append(command_t **head, command_t *new)
     last_command = command_last(head);
 
     last_command->next = new;
-}
-
-static command_t *parse_pipeline(parser_t *parser)
-{
-    command_t *pipeline = NULL;
-    command_t *cmd;
-
-    while (1)
-    {
-        cmd = parse_command(parser);
-        if (!cmd)
-            break;
-
-        command_append(&pipeline, cmd);
-
-        if (!parser->current || parser->current->type != TOKEN_PIPE)
-            break;
-
-        parser_advance(parser);
-    }
-
-    return pipeline;
 }
 
 static void free_command(command_t *cmd)
@@ -204,4 +130,76 @@ static void free_command_list(command_t *head)
         free_command(head);
         head = next;
     }
+}
+
+static command_t *parse_command(parser_t *parser)
+{
+    command_t *cmd;
+    int argc;
+    int i;
+
+    argc = count_words(parser->current);
+
+    if (argc == 0)
+        return NULL;
+
+    cmd = command_new();
+    if (!cmd)
+    {
+        return NULL;
+    }
+
+    cmd->argv = (char **)malloc(sizeof(char *) * (argc + 1));
+    if (!cmd->argv)
+    {
+        fprintf(stderr, "minish: out of memory\n");
+        free(cmd);
+        return NULL;
+    }
+
+    i = 0;
+    while (parser->current && parser->current->type == TOKEN_WORD)
+    {
+        cmd->argv[i] = strdup(parser->current->value);
+        if (!cmd->argv[i])
+        {
+            while (i > 0)
+            {
+                i--;
+                free(cmd->argv[i]);
+            }
+            free(cmd->argv);
+            free(cmd);
+            return NULL;
+        }
+
+        i++;
+        parser_advance(parser);
+    }
+
+    cmd->argv[i] = NULL;
+
+    return cmd;
+}
+
+static command_t *parse_pipeline(parser_t *parser)
+{
+    command_t *pipeline = NULL;
+    command_t *cmd;
+
+    while (1)
+    {
+        cmd = parse_command(parser);
+        if (!cmd)
+            break;
+
+        command_append(&pipeline, cmd);
+
+        if (!parser->current || parser->current->type != TOKEN_PIPE)
+            break;
+
+        parser_advance(parser);
+    }
+
+    return pipeline;
 }
