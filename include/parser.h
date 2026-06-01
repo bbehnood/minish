@@ -9,6 +9,11 @@ typedef struct command
     struct command *next;
 } command_t;
 
+typedef struct parser
+{
+    token_t *current;
+} parser_t;
+
 /**
  * @brief Parses a linked-list of tokens.
  * @param line The command String.
