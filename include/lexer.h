@@ -1,6 +1,7 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include "shell.h"
 #include "token.h"
 #include <stddef.h>
 
@@ -13,8 +14,8 @@ typedef struct lexer
 
 /**
  * @brief Tokenizes the input.
- * @param input The input string.
+ * @param shell Pointer to the shell struct.
  */
-token_t *tokenize(const char *input);
+token_t *tokenize(shell_t *shell);
 
 #endif // !LEXER_H
