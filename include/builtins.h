@@ -4,7 +4,7 @@
 #include "parser.h"
 #include "shell.h"
 
-typedef int (*builtin_fn)(shell_t *shell, char **argv);
+typedef void (*builtin_fn)(shell_t *shell, char **argv);
 
 typedef struct builtin
 {
@@ -17,6 +17,6 @@ typedef struct builtin
  * @param cmd Pointer to the command struct.
  * @return 1 if builtins found and executed, 0 if not.
  */
-int handle_builtins(command_t *cmd);
+int handle_builtins(shell_t *shell);
 
 #endif // !BUILTINS_H
