@@ -115,3 +115,67 @@ static command_t *parse_command(parser_t *parser)
 
     return cmd;
 }
+
+static command_t *command_new(void)
+{
+    command_t *cmd = (command_t *)malloc(sizeof(command_t));
+    if (!cmd)
+    {
+        fprintf(stderr, "minish: out of memory\n");
+        return NULL;
+    }
+
+    cmd->argv = NULL;
+    cmd->next = NULL;
+
+    return cmd;
+}
+
+static command_t *command_last(command_t **head)
+{
+    command_t *current = *head;
+
+    while (current->next)
+    {
+        current = current->next;
+    }
+
+    return current;
+}
+
+static void command_append(command_t **head, command_t *new)
+{
+    command_t *last_command;
+
+    if (!*head)
+    {
+        *head = new;
+        return;
+    }
+
+    last_command = command_last(head);
+
+    last_command->next = new;
+}
+
+static command_t *parse_pipeline(parser_t *parser)
+{
+    command_t *pipeline = NULL;
+    command_t *cmd;
+
+    while (1)
+    {
+        cmd = parse_command(parser);
+        if (!cmd)
+            break;
+
+        command_append(&pipeline, cmd);
+
+        if (!parser->current || parser->current->type != TOKEN_PIPE)
+            break;
+
+        parser_advance(parser);
+    }
+
+    return pipeline;
+}
