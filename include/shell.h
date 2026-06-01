@@ -1,8 +1,9 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#include "parser.h"
 #include "token.h"
+
+typedef struct command command_t;
 
 typedef struct
 {
