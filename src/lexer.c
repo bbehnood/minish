@@ -1,4 +1,5 @@
 #include "lexer.h"
+#include "shell.h"
 #include "token.h"
 #include <ctype.h>
 #include <stddef.h>
@@ -58,7 +59,7 @@ static char *collect_word(lexer_t *lexer)
     return word;
 }
 
-token_t *tokenize(const char *input)
+token_t *tokenize(shell_t *shell)
 {
     lexer_t lexer;
     token_t *tokens;
@@ -66,7 +67,7 @@ token_t *tokenize(const char *input)
 
     tokens = NULL;
 
-    lexer_init(&lexer, input);
+    lexer_init(&lexer, shell->input_line);
 
     while (lexer.current)
     {
