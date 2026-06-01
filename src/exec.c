@@ -27,7 +27,7 @@ void execute_command(shell_t *shell)
     {
         execvp(shell->cmd->argv[0], shell->cmd->argv);
 
-        perror("execvp");
+        perror(shell->cmd->argv[0]);
         exit(EXIT_FAILURE);
     }
     else if (pid < 0)
