@@ -6,6 +6,7 @@
 typedef struct command
 {
     char **argv;
+    struct command *next;
 } command_t;
 
 /**
