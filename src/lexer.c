@@ -78,14 +78,22 @@ token_t *tokenize(shell_t *shell)
 
         if (lexer.current == '|')
         {
-            append_token(&tokens, new_token(TOKEN_PIPE, NULL));
+            token_t *new = new_token(TOKEN_PIPE, NULL);
+            if (!new)
+                return NULL;
+
+            append_token(&tokens, new);
             lexer_advance(&lexer);
         }
         else
         {
             word = collect_word(&lexer);
 
-            append_token(&tokens, new_token(TOKEN_WORD, word));
+            token_t *new = new_token(TOKEN_WORD, word);
+            if (!new)
+                return NULL;
+
+            append_token(&tokens, new);
 
             free(word);
         }
