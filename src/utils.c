@@ -1,9 +1,78 @@
 #include "utils.h"
 #include "parser.h"
+#include "shell.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+char *env_get(shell_t *shell, const char *key)
+{
+    size_t key_len;
+    int i;
+
+    key_len = strlen(key);
+
+    i = 0;
+    while (shell->env[i])
+    {
+        if (strncmp(shell->env[i], key, key_len) == 0 &&
+            shell->env[i][key_len] == '=')
+        {
+            return shell->env[i] + key_len + 1;
+        }
+
+        i++;
+    }
+
+    return NULL;
+}
+
+int env_set(shell_t *shell, const char *key, const char *value)
+{
+    size_t key_len;
+    size_t env_count;
+    char *new_entry;
+    char **new_env;
+    size_t i;
+
+    if (!shell || !key || !value)
+        return -1;
+
+    key_len = strlen(key);
+
+    new_entry = malloc(key_len + strlen(value) + 2);
+    if (!new_entry)
+        return -1;
+
+    sprintf(new_entry, "%s=%s", key, value);
+
+    for (i = 0; shell->env[i]; i++)
+    {
+        if (strncmp(shell->env[i], key, key_len) == 0 &&
+            shell->env[i][key_len] == '=')
+        {
+            free(shell->env[i]);
+            shell->env[i] = new_entry;
+            return 0;
+        }
+    }
+
+    env_count = i;
+
+    new_env = realloc(shell->env, sizeof(char *) * (env_count + 2));
+    if (!new_env)
+    {
+        free(new_entry);
+        return -1;
+    }
+
+    shell->env = new_env;
+    shell->env[env_count] = new_entry;
+    shell->env[env_count + 1] = NULL;
+
+    return 0;
+}
 
 void print_tokens(token_t *head)
 {
