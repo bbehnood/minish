@@ -179,3 +179,29 @@ static command_t *parse_pipeline(parser_t *parser)
 
     return pipeline;
 }
+
+static void free_command(command_t *cmd)
+{
+    int i = 0;
+
+    while (cmd->argv[i])
+    {
+        free(cmd->argv[i]);
+        i++;
+    }
+
+    free(cmd->argv);
+    free(cmd);
+}
+
+static void free_command_list(command_t *head)
+{
+    command_t *next;
+
+    while (head)
+    {
+        next = head->next;
+        free_command(head);
+        head = next;
+    }
+}
