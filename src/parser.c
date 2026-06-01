@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "shell.h"
 #include "token.h"
 #include <stddef.h>
 #include <stdio.h>
@@ -200,6 +201,21 @@ static command_t *parse_pipeline(parser_t *parser)
 
         parser_advance(parser);
     }
+
+    return pipeline;
+}
+
+command_t *parse_line(shell_t *shell)
+{
+    parser_t parser;
+    command_t *pipeline;
+
+    if (validate_syntax(shell->tokens) == -1)
+        return NULL;
+
+    parser_init(&parser, shell->tokens);
+
+    pipeline = parse_pipeline(&parser);
 
     return pipeline;
 }

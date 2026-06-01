@@ -20,6 +20,6 @@ typedef struct parser
  * @param shell Pointer to the shell context struct.
  * @return Pointer to the parsed command struct.
  */
-command_t *parse_line(shell_t shell);
+command_t *parse_line(shell_t *shell);
 
 #endif // !PARSER_H
