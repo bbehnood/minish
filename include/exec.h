@@ -1,12 +1,12 @@
 #ifndef EXEC_H
 #define EXEC_H
 
-#include "parser.h"
+#include "shell.h"
 
 /**
  * @brief Executes a command.
  * @param cmd Pointer to the command struct.
  */
-void execute_command(command_t *cmd);
+void execute_command(shell_t *shell);
 
 #endif // !EXEC_H

@@ -26,7 +26,7 @@ int main(int argc, char **argv, char **envp)
 
         shell.tokens = tokenize(shell.input_line);
         shell.cmd = parse_command(shell.tokens);
-        execute_command(shell.cmd);
+        execute_command(&shell);
 
         shell_reset(&shell);
     }

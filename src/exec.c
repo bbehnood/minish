@@ -1,4 +1,5 @@
 #include "exec.h"
+#include "builtins.h"
 #include "parser.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,12 +7,17 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-void execute_command(command_t *cmd)
+void execute_command(shell_t *shell)
 {
     pid_t pid;
     int status = 0;
 
-    if (!cmd)
+    if (!shell->cmd)
+    {
+        return;
+    }
+
+    if (handle_builtins(shell))
     {
         return;
     }
@@ -19,7 +25,7 @@ void execute_command(command_t *cmd)
     pid = fork();
     if (pid == 0)
     {
-        execvp(cmd->argv[0], cmd->argv);
+        execvp(shell->cmd->argv[0], shell->cmd->argv);
 
         perror("execvp");
         exit(EXIT_FAILURE);

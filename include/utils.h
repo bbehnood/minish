@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include "parser.h"
+#include "shell.h"
 #include "token.h"
 
 /**
@@ -22,5 +23,22 @@ void print_command(command_t *cmd);
  * @return A copy of the environment variables.
  */
 char **copy_env(char **envp);
+
+/**
+ * @brief Gets a value from the environment variables.
+ * @param shell Pointer to the shell struct.
+ * @param key The environment variable key to search for.
+ * @return The value of the variable.
+ */
+char *env_get(shell_t *shell, const char *key);
+
+/**
+ * @brief Sets a value to an environment variable.
+ * @param shell Pointer to the shell struct.
+ * @param key The environment variable's key.
+ * @param value The environment variable's value.
+ * @return 0 on success. -1 if there was an error.
+ */
+int env_set(shell_t *shell, const char *key, const char *value);
 
 #endif // !UTILS_H
