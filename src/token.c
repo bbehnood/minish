@@ -11,6 +11,7 @@ token_t *new_token(token_type_t type, const char *value)
         fprintf(stderr, "minish: out of memory\n");
         return NULL;
     }
+
     token->type = type;
 
     if (value)

@@ -90,7 +90,7 @@ token_t *tokenize(shell_t *shell)
             word = collect_word(&lexer);
 
             token_t *new = new_token(TOKEN_WORD, word);
-            if (!new)
+            if (!new || !word)
                 return NULL;
 
             append_token(&tokens, new);
