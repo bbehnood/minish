@@ -1,4 +1,5 @@
 #include "token.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -6,7 +7,10 @@ token_t *new_token(token_type_t type, const char *value)
 {
     token_t *token = (token_t *)malloc(sizeof(token_t));
     if (!token)
+    {
+        fprintf(stderr, "minish: out of memory\n");
         return NULL;
+    }
 
     token->type = type;
 
