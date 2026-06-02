@@ -2,6 +2,7 @@
 #define SHELL_H
 
 #include "token.h"
+#include <linux/limits.h>
 
 typedef struct command command_t;
 
@@ -9,6 +10,11 @@ typedef struct
 {
     int running;
     int last_status;
+
+    char username[64];
+    char hostname[256];
+
+    char cwd[PATH_MAX];
 
     char **env;
     char *input_line;

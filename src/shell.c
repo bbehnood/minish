@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "parser.h"
 #include "token.h"
+#include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,6 +59,22 @@ void shell_init(shell_t *shell, char **envp)
     shell->input_line = NULL;
     shell->tokens = NULL;
     shell->cmd = NULL;
+
+    if (!getcwd(shell->cwd, sizeof(shell->cwd)))
+    {
+        perror("getcwd");
+        shell->running = 0;
+        return;
+    };
+
+    struct passwd *pw = getpwuid(getuid());
+    if (pw)
+        strncpy(shell->username, pw->pw_name, sizeof(shell->username) - 1);
+    else
+        strcpy(shell->username, "unknown");
+
+    if (gethostname(shell->hostname, sizeof(shell->hostname)) != 0)
+        strcpy(shell->hostname, "unknown");
 
     if (!shell->env)
     {
