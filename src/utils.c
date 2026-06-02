@@ -131,3 +131,29 @@ void print_head(command_t *head)
         cmd_index++;
     }
 }
+
+void print_pipeline(command_t *pipeline)
+{
+    int cmd_index = 0;
+
+    if (!pipeline)
+    {
+        printf("NULL pipeline\n");
+        return;
+    }
+
+    while (pipeline)
+    {
+        printf("COMMAND %d:\n", cmd_index);
+
+        for (int i = 0; pipeline->argv[i]; i++)
+            printf("  argv[%d] = \"%s\"\n", i, pipeline->argv[i]);
+
+        pipeline = pipeline->next;
+
+        if (pipeline)
+            printf("  |\n");
+
+        cmd_index++;
+    }
+}
