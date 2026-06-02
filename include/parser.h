@@ -21,5 +21,10 @@ typedef struct parser
  * @return Pointer to the parsed command struct.
  */
 command_t *parse_line(shell_t *shell);
+/**
+ * @brief Frees a list of commands.
+ * @param head Pointer to the head of the commands linked-list.
+ */
+void free_command_list(command_t *head);
 
 #endif // !PARSER_H

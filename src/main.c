@@ -2,6 +2,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "shell.h"
+#include "utils.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,8 +28,8 @@ int main(int argc, char **argv, char **envp)
         shell.tokens = tokenize(&shell);
         if (shell.tokens)
         {
-            shell.cmd = parse_command(shell.tokens);
-            execute_command(&shell);
+            shell.cmd = parse_line(&shell);
+            print_pipeline(shell.cmd);
         }
 
         shell_reset(&shell);

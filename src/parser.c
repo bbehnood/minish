@@ -102,7 +102,7 @@ static void command_append(command_t **head, command_t *new)
         return;
     }
 
-    last_command = command_last(head);
+    last_command = command_last(*head);
 
     last_command->next = new;
 }
@@ -121,7 +121,7 @@ static void free_command(command_t *cmd)
     free(cmd);
 }
 
-static void free_command_list(command_t *head)
+void free_command_list(command_t *head)
 {
     command_t *next;
 
