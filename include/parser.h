@@ -1,23 +1,30 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "shell.h"
 #include "token.h"
 
 typedef struct command
 {
     char **argv;
+    struct command *next;
 } command_t;
 
+typedef struct parser
+{
+    token_t *current;
+} parser_t;
+
 /**
- * @brief Parses a linked-list of tokens.
- * @param line The command String.
- * @return Pointer to a command struct.
+ * @brief Parses a line of command.
+ * @param shell Pointer to the shell context struct.
+ * @return Pointer to the parsed command struct.
  */
-command_t *parse_command(token_t *tokens);
+command_t *parse_line(shell_t *shell);
 /**
- * @brief Frees the allocated memory for a command.
- * @param cmd Pointer to the command struct.
+ * @brief Frees a list of commands.
+ * @param head Pointer to the head of the commands linked-list.
  */
-void free_command(command_t *cmd);
+void free_command_list(command_t *head);
 
 #endif // !PARSER_H

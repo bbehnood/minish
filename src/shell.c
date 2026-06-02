@@ -72,7 +72,7 @@ void shell_cleanup(shell_t *shell)
     if (shell->tokens)
         free_tokens(shell->tokens);
     if (shell->cmd)
-        free_command(shell->cmd);
+        free_command_list(shell->cmd);
 
     free_env(shell->env);
     free(shell->input_line);
@@ -82,6 +82,6 @@ void shell_reset(shell_t *shell)
 {
     free_tokens(shell->tokens);
     shell->tokens = NULL;
-    free_command(shell->cmd);
+    free_command_list(shell->cmd);
     shell->cmd = NULL;
 }

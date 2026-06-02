@@ -105,3 +105,55 @@ void print_command(command_t *cmd)
         i++;
     }
 }
+
+void print_head(command_t *head)
+{
+    int cmd_index = 0;
+
+    if (!head)
+    {
+        printf("NULL head\n");
+        return;
+    }
+
+    while (head)
+    {
+        printf("COMMAND %d:\n", cmd_index);
+
+        for (int i = 0; head->argv[i]; i++)
+            printf("  argv[%d] = \"%s\"\n", i, head->argv[i]);
+
+        head = head->next;
+
+        if (head)
+            printf("  |\n");
+
+        cmd_index++;
+    }
+}
+
+void print_pipeline(command_t *pipeline)
+{
+    int cmd_index = 0;
+
+    if (!pipeline)
+    {
+        printf("NULL pipeline\n");
+        return;
+    }
+
+    while (pipeline)
+    {
+        printf("COMMAND %d:\n", cmd_index);
+
+        for (int i = 0; pipeline->argv[i]; i++)
+            printf("  argv[%d] = \"%s\"\n", i, pipeline->argv[i]);
+
+        pipeline = pipeline->next;
+
+        if (pipeline)
+            printf("  |\n");
+
+        cmd_index++;
+    }
+}
