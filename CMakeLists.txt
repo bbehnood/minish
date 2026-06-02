@@ -13,9 +13,6 @@ file(GLOB SRC
 add_executable(minish ${SRC})
 
 target_compile_options(minish PRIVATE
-    -Wall
-    -Wextra
-    -Wpedantic
-    -O0
-    -g
+    $<$<CONFIG:Debug>:-g -O0 -Wall -Wextra -Wpedantic>
+    $<$<CONFIG:Release>:-O3>
 )
