@@ -29,7 +29,10 @@ int main(int argc, char **argv, char **envp)
         if (shell.tokens)
         {
             shell.cmd = parse_line(&shell);
-            print_pipeline(shell.cmd);
+            if (shell.cmd)
+            {
+                execute_command(&shell);
+            }
         }
 
         shell_reset(&shell);
