@@ -105,3 +105,29 @@ void print_command(command_t *cmd)
         i++;
     }
 }
+
+void print_head(command_t *head)
+{
+    int cmd_index = 0;
+
+    if (!head)
+    {
+        printf("NULL head\n");
+        return;
+    }
+
+    while (head)
+    {
+        printf("COMMAND %d:\n", cmd_index);
+
+        for (int i = 0; head->argv[i]; i++)
+            printf("  argv[%d] = \"%s\"\n", i, head->argv[i]);
+
+        head = head->next;
+
+        if (head)
+            printf("  |\n");
+
+        cmd_index++;
+    }
+}
