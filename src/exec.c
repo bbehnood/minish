@@ -168,13 +168,15 @@ static void execute_pipeline(shell_t *shell)
             pipefd[1] = STDOUT_FILENO;
         }
 
-        pids[i++] = spawn_command(cmd, prev_read, pipefd[1]);
+        pids[i] = spawn_command(cmd, prev_read, pipefd[1]);
         if (pids[i] == -1)
         {
             free(pids);
             shell->last_status = 1;
             return;
         }
+
+        i++;
 
         if (prev_read != STDIN_FILENO)
             close(prev_read);
