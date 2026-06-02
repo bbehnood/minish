@@ -14,6 +14,7 @@ builtin_t builtins[] = {
     {"cd", builtin_cd},
     {"exit", builtin_exit},
     {"pwd", builtin_pwd},
+    {NULL, NULL},
 };
 
 int handle_builtins(shell_t *shell)
