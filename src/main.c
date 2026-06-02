@@ -2,10 +2,13 @@
 #include "lexer.h"
 #include "parser.h"
 #include "shell.h"
-#include "utils.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#define C_RESET "\033[0m"
+#define C_GREEN "\033[32m"
+#define C_BLUE "\033[34m"
 
 int main(int argc, char **argv, char **envp)
 {
@@ -16,7 +19,8 @@ int main(int argc, char **argv, char **envp)
 
     while (shell.running)
     {
-        printf("minish> ");
+        printf("%s%s@%s%s:%s%s%s$ ", C_GREEN, shell.username, shell.hostname,
+               C_RESET, C_BLUE, shell.cwd, C_RESET);
         fflush(stdout);
 
         if (getline(&shell.input_line, &len, stdin) == -1)
