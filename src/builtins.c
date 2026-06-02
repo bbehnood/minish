@@ -61,6 +61,13 @@ static void builtin_cd(shell_t *shell, char **argv)
         return;
     }
 
+    if (!getcwd(shell->cwd, sizeof(shell->cwd)))
+    {
+        perror("getcwd");
+        shell->running = 0;
+        return;
+    }
+
     shell->last_status = 0;
 }
 
