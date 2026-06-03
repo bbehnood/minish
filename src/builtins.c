@@ -73,8 +73,7 @@ static void builtin_cd(shell_t *shell, char **argv)
 
 static void builtin_exit(shell_t *shell, char **argv)
 {
-    shell_cleanup(shell);
-    exit(EXIT_SUCCESS);
+    shell->running = 0;
 }
 
 static void builtin_pwd(shell_t *shell, char **argv)
