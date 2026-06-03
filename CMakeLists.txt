@@ -16,3 +16,5 @@ target_compile_options(minish PRIVATE
     $<$<CONFIG:Debug>:-g -O0 -Wall -Wextra -Wpedantic>
     $<$<CONFIG:Release>:-O3>
 )
+
+target_link_libraries(minish PRIVATE readline)
