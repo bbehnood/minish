@@ -101,6 +101,10 @@ static command_t *command_new(void)
     }
 
     cmd->argv = NULL;
+    cmd->infile = NULL;
+    cmd->outfile = NULL;
+    cmd->heredoc = NULL;
+    cmd->append = 0;
     cmd->next = NULL;
 
     return cmd;
