@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 static void wait_child(shell_t *shell, pid_t pid)
 {
@@ -62,6 +63,47 @@ static int command_is_last(command_t *cmd)
     return cmd->next == NULL;
 }
 
+static void apply_redirections(command_t *cmd)
+{
+    int fd;
+
+    if (cmd->infile)
+    {
+        fd = open(cmd->infile, O_RDONLY);
+        if (fd < 0)
+        {
+            perror(cmd->infile);
+            exit(EXIT_FAILURE);
+        }
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+    }
+
+    if (cmd->outfile)
+    {
+        if (cmd->append)
+            fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        else
+            fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+        if (fd < 0)
+        {
+            perror(cmd->outfile);
+            exit(EXIT_FAILURE);
+        }
+
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+    }
+
+    if (cmd->heredoc)
+    {
+        // TODO: Implement full heredoc
+        fprintf(stderr, "heredoc not implemented yet: %s\n", cmd->heredoc);
+        exit(EXIT_FAILURE);
+    }
+}
+
 static pid_t spawn_command(command_t *cmd, int input_fd, int output_fd)
 {
     pid_t pid;
@@ -87,6 +129,8 @@ static pid_t spawn_command(command_t *cmd, int input_fd, int output_fd)
             dup2(output_fd, STDOUT_FILENO);
             close(output_fd);
         }
+
+        apply_redirections(cmd);
 
         execvp(cmd->argv[0], cmd->argv);
 
@@ -115,6 +159,8 @@ static void execute_single(shell_t *shell)
 
     if (pid == 0)
     {
+        apply_redirections(shell->cmd);
+
         execvp(shell->cmd->argv[0], shell->cmd->argv);
 
         perror(shell->cmd->argv[0]);
