@@ -8,7 +8,7 @@
 
 static int is_operator(char c)
 {
-    return c == '|';
+    return c == '|' || c == '>' || c == '<';
 }
 
 static void lexer_init(lexer_t *lexer, const char *input)
@@ -59,6 +59,50 @@ static char *collect_word(lexer_t *lexer)
     return word;
 }
 
+static token_t *handle_redirection(lexer_t *lexer)
+{
+    token_t *new = NULL;
+
+    if (lexer->current == '>')
+    {
+        lexer_advance(lexer);
+
+        if (lexer->current == '>')
+        {
+            lexer_advance(lexer);
+            new = new_token(TOKEN_APPEND, NULL);
+            if (!new)
+                return NULL;
+        }
+        else
+        {
+            new = new_token(TOKEN_REDIR_OUT, NULL);
+            if (!new)
+                return NULL;
+        }
+    }
+    else if (lexer->current == '<')
+    {
+        lexer_advance(lexer);
+
+        if (lexer->current == '<')
+        {
+            lexer_advance(lexer);
+            new = new_token(TOKEN_HEREDOC, NULL);
+            if (!new)
+                return NULL;
+        }
+        else
+        {
+            new = new_token(TOKEN_REDIR_IN, NULL);
+            if (!new)
+                return NULL;
+        }
+    }
+
+    return new;
+}
+
 token_t *tokenize(shell_t *shell)
 {
     lexer_t lexer;
@@ -84,6 +128,14 @@ token_t *tokenize(shell_t *shell)
 
             append_token(&tokens, new);
             lexer_advance(&lexer);
+        }
+        else if (lexer.current == '>' || lexer.current == '<')
+        {
+            token_t *new = handle_redirection(&lexer);
+            if (!new)
+                return NULL;
+
+            append_token(&tokens, new);
         }
         else
         {
