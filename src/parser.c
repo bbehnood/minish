@@ -21,6 +21,12 @@ static void syntax_error(const char *token)
     fprintf(stderr, "minish: syntax error near `%s`\n", token);
 }
 
+static int is_redirection(token_type_t type)
+{
+    return type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
+           type == TOKEN_APPEND || type == TOKEN_HEREDOC;
+}
+
 static int validate_syntax(token_t *tokens)
 {
     if (tokens->type == TOKEN_PIPE)
@@ -28,8 +34,6 @@ static int validate_syntax(token_t *tokens)
         syntax_error(tokens->value);
         return -1;
     }
-
-    tokens = tokens->next;
 
     while (tokens)
     {
@@ -42,6 +46,21 @@ static int validate_syntax(token_t *tokens)
             }
 
             if (tokens->next->type == TOKEN_PIPE)
+            {
+                syntax_error(tokens->value);
+                return -1;
+            }
+        }
+        else if (is_redirection(tokens->type))
+        {
+            if (!tokens->next)
+            {
+                syntax_error(tokens->value);
+                return -1;
+            }
+
+            if (tokens->next->type == TOKEN_PIPE ||
+                is_redirection(tokens->next->type))
             {
                 syntax_error(tokens->value);
                 return -1;
