@@ -27,6 +27,11 @@ static int is_redirection(token_type_t type)
            type == TOKEN_APPEND || type == TOKEN_HEREDOC;
 }
 
+static int is_word(token_t *token)
+{
+    return token->type == TOKEN_WORD;
+}
+
 static int validate_syntax(token_t *tokens)
 {
     if (tokens->type == TOKEN_PIPE)
@@ -152,53 +157,100 @@ void free_command_list(command_t *head)
     }
 }
 
+static int parse_redirection(parser_t *parser, command_t *cmd)
+{
+    token_t *t = parser->current;
+
+    if (!t || !is_redirection(t->type))
+        return 0;
+
+    token_type_t type = t->type;
+    parser_advance(parser);
+
+    if (!parser->current || parser->current->type != TOKEN_WORD)
+    {
+        syntax_error("newline");
+        return -1;
+    }
+
+    char *filename = parser->current->value;
+    parser_advance(parser);
+
+    if (type == TOKEN_REDIR_IN)
+        cmd->infile = strdup(filename);
+
+    else if (type == TOKEN_REDIR_OUT)
+    {
+        cmd->outfile = strdup(filename);
+        cmd->append = 0;
+    }
+    else if (type == TOKEN_APPEND)
+    {
+        cmd->outfile = strdup(filename);
+        cmd->append = 1;
+    }
+    else if (type == TOKEN_HEREDOC)
+    {
+        cmd->heredoc = strdup(filename);
+    }
+
+    return 0;
+}
+
 static command_t *parse_command(parser_t *parser)
 {
     command_t *cmd;
-    int argc;
-    int i;
+    int argc = 0;
+    token_t *tmp;
 
-    argc = count_words(parser->current);
+    tmp = parser->current;
+
+    while (tmp && tmp->type != TOKEN_PIPE)
+    {
+        if (tmp->type == TOKEN_WORD)
+            argc++;
+
+        tmp = tmp->next;
+    }
 
     if (argc == 0)
         return NULL;
 
     cmd = command_new();
     if (!cmd)
-    {
         return NULL;
-    }
 
-    cmd->argv = (char **)malloc(sizeof(char *) * (argc + 1));
+    cmd->argv = malloc(sizeof(char *) * (argc + 1));
     if (!cmd->argv)
     {
-        fprintf(stderr, "minish: out of memory\n");
         free(cmd);
         return NULL;
     }
 
-    i = 0;
-    while (parser->current && parser->current->type == TOKEN_WORD)
-    {
-        cmd->argv[i] = strdup(parser->current->value);
-        if (!cmd->argv[i])
-        {
-            while (i > 0)
-            {
-                i--;
-                free(cmd->argv[i]);
-            }
-            free(cmd->argv);
-            free(cmd);
-            return NULL;
-        }
+    int i = 0;
 
-        i++;
-        parser_advance(parser);
+    while (parser->current && parser->current->type != TOKEN_PIPE)
+    {
+        if (parser->current->type == TOKEN_WORD)
+        {
+            cmd->argv[i++] = strdup(parser->current->value);
+            parser_advance(parser);
+        }
+        else if (is_redirection(parser->current->type))
+        {
+            if (parse_redirection(parser, cmd) == -1)
+            {
+                free_command(cmd);
+                return NULL;
+            }
+        }
+        else
+        {
+            break;
+        }
     }
 
     cmd->argv[i] = NULL;
-
     return cmd;
 }
 

@@ -7,6 +7,12 @@
 typedef struct command
 {
     char **argv;
+
+    char *infile;
+    char *outfile;
+    char *heredoc;
+    int append;
+
     struct command *next;
 } command_t;
 
