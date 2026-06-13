@@ -11,6 +11,7 @@ Minish is a lightweight Unix shell implementation written in C. It provides a si
   * `pwd`
   * `exit`
 * Command pipelines (`|`)
+* Output redirection (`<`, `>`, `>>`)
 * Interactive command prompt
 * Line editing and history support via Readline
 

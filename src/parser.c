@@ -27,11 +27,6 @@ static int is_redirection(token_type_t type)
            type == TOKEN_APPEND || type == TOKEN_HEREDOC;
 }
 
-static int is_word(token_t *token)
-{
-    return token->type == TOKEN_WORD;
-}
-
 static int validate_syntax(token_t *tokens)
 {
     if (tokens->type == TOKEN_PIPE)
@@ -76,19 +71,6 @@ static int validate_syntax(token_t *tokens)
     }
 
     return 0;
-}
-
-static int count_words(token_t *tokens)
-{
-    int count = 0;
-
-    while (tokens && tokens->type == TOKEN_WORD)
-    {
-        tokens = tokens->next;
-        count++;
-    }
-
-    return count;
 }
 
 static command_t *command_new(void)

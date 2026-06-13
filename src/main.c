@@ -20,7 +20,6 @@
 int main(int argc, char **argv, char **envp)
 {
     shell_t shell;
-    size_t len = 0;
     char prompt[PROMPT_SIZE];
     char history_file[PATH_MAX];
 
