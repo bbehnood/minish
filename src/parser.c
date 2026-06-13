@@ -128,6 +128,9 @@ static void free_command(command_t *cmd)
     }
 
     free(cmd->argv);
+    free(cmd->infile);
+    free(cmd->outfile);
+    free(cmd->heredoc);
     free(cmd);
 }
 
@@ -163,20 +166,25 @@ static int parse_redirection(parser_t *parser, command_t *cmd)
     parser_advance(parser);
 
     if (type == TOKEN_REDIR_IN)
+    {
+        free(cmd->infile);
         cmd->infile = strdup(filename);
-
+    }
     else if (type == TOKEN_REDIR_OUT)
     {
+        free(cmd->outfile);
         cmd->outfile = strdup(filename);
         cmd->append = 0;
     }
     else if (type == TOKEN_APPEND)
     {
+        free(cmd->outfile);
         cmd->outfile = strdup(filename);
         cmd->append = 1;
     }
     else if (type == TOKEN_HEREDOC)
     {
+        free(cmd->heredoc);
         cmd->heredoc = strdup(filename);
     }
 
