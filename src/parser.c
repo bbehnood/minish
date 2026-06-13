@@ -128,6 +128,9 @@ static void free_command(command_t *cmd)
     }
 
     free(cmd->argv);
+    free(cmd->infile);
+    free(cmd->outfile);
+    free(cmd->heredoc);
     free(cmd);
 }
 
