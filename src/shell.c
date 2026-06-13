@@ -97,6 +97,8 @@ void shell_cleanup(shell_t *shell)
 
 void shell_reset(shell_t *shell)
 {
+    free(shell->input_line);
+    shell->input_line = NULL;
     free_tokens(shell->tokens);
     shell->tokens = NULL;
     free_command_list(shell->cmd);
