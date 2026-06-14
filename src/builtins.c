@@ -73,6 +73,7 @@ static void builtin_cd(shell_t *shell, char **argv)
 
 static void builtin_exit(shell_t *shell, char **argv)
 {
+    (void)argv;
     shell->running = 0;
 }
 
