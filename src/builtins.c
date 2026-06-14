@@ -39,7 +39,7 @@ static void builtin_cd(shell_t *shell, char **argv)
 {
     char *path = NULL;
 
-    if (argv[2])
+    if (argv[1] && argv[2])
     {
         fprintf(stderr, "cd: too many arguments\n");
         return;
