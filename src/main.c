@@ -23,6 +23,9 @@ int main(int argc, char **argv, char **envp)
     char prompt[PROMPT_SIZE];
     char history_file[PATH_MAX];
 
+    (void)argc;
+    (void)argv;
+
     shell_init(&shell, envp);
 
     snprintf(history_file, sizeof(history_file), "%s/.minish_history",
