@@ -47,7 +47,27 @@ sudo pacman -S readline
 brew install readline
 ```
 
-## Building
+## Building with Meson (recommended)
+
+Configure the build directory with Meson:
+
+```bash
+meson setup build --buildtype=release
+```
+
+For using clang:
+
+```bash
+CC=clang meson setup build --buildtype=release
+```
+
+Build the project:
+
+```bash
+meson compile -C build
+```
+
+## Building with CMake
 
 Create a build directory and configure the project with CMake:
 
@@ -69,7 +89,7 @@ cmake -S . -B build \
   -DCMAKE_BUILD_TYPE=Release
 ```
 
-Build the project:
+Build:
 
 ```bash
 cmake --build build
