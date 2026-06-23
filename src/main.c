@@ -10,9 +10,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#define C_RESET "\033[0m"
-#define C_GREEN "\033[32m"
-#define C_BLUE "\033[34m"
+#define C_RESET "\001\033[0m\002"
+#define C_GREEN "\001\033[32m\002"
+#define C_BLUE "\001\033[34m\002"
 
 #define PROMPT_SIZE 1024
 #define HISTORY_SIZE 1000
