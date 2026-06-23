@@ -18,7 +18,7 @@ Minish is a lightweight Unix shell implementation written in C. It provides a si
 ## Requirements
 
 * C compiler (`clang` or `gcc`)
-* CMake
+* Meson (or CMake)
 * Readline development library
 
 ### Installing Readline
@@ -52,13 +52,13 @@ brew install readline
 Configure the build directory with Meson:
 
 ```bash
-meson setup build --buildtype=release
+CC=clang meson setup build --buildtype=release
 ```
 
-For using clang:
+If not using clang:
 
 ```bash
-CC=clang meson setup build --buildtype=release
+meson setup build --buildtype=release
 ```
 
 Build the project:
