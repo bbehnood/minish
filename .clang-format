@@ -7,3 +7,5 @@ AllowShortLoopsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: false
 ColumnLimit: 80
 SortIncludes: false
+BinPackArguments: false
+BinPackParameters: false
