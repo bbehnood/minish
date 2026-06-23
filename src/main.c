@@ -28,7 +28,9 @@ int main(int argc, char **argv, char **envp)
 
     shell_init(&shell, envp);
 
-    snprintf(history_file, sizeof(history_file), "%s/.minish_history",
+    snprintf(history_file,
+             sizeof(history_file),
+             "%s/.minish_history",
              env_get(&shell, "HOME"));
 
     using_history();
@@ -37,8 +39,15 @@ int main(int argc, char **argv, char **envp)
 
     while (shell.running)
     {
-        snprintf(prompt, sizeof(prompt), "%s%s@%s%s:%s%s%s$ ", C_GREEN,
-                 shell.username, shell.hostname, C_RESET, C_BLUE, shell.cwd,
+        snprintf(prompt,
+                 sizeof(prompt),
+                 "%s%s@%s%s:%s%s%s$ ",
+                 C_GREEN,
+                 shell.username,
+                 shell.hostname,
+                 C_RESET,
+                 C_BLUE,
+                 shell.cwd,
                  C_RESET);
 
         shell.input_line = readline(prompt);
