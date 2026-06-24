@@ -242,9 +242,6 @@ static void execute_pipeline(shell_t *shell)
 
 void execute_command(shell_t *shell)
 {
-    if (!shell->cmd)
-        return;
-
     if (!command_is_last(shell->cmd))
         execute_pipeline(shell);
     else
