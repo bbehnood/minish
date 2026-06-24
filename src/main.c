@@ -57,7 +57,7 @@ int main(int argc, char **argv, char **envp)
         if (shell.tokens)
         {
             shell.cmd = parse_line(&shell);
-            if (shell.cmd)
+            if (shell.cmd && shell.cmd->argv && shell.cmd->argv[0])
             {
                 execute_command(&shell);
             }
