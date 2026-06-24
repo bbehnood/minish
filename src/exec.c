@@ -235,6 +235,9 @@ static void execute_pipeline(shell_t *shell)
         cmd = cmd->next;
     }
 
+    if (prev_read != STDIN_FILENO)
+        close(prev_read);
+
     wait_children(shell, pids, count);
 
     free(pids);
