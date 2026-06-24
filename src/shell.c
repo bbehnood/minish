@@ -27,6 +27,11 @@ static char **copy_env(char **envp)
         if (!copy[i])
         {
             fprintf(stderr, "minish: out of memory\n");
+
+            for (int j = 0; j < i; j++)
+                free(copy[j]);
+
+            free(copy);
             return NULL;
         }
     }
